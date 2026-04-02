@@ -21,13 +21,13 @@ export default function CloudWatch() {
   } = useFrecencySorting(logGroups, {
     namespace: "aws-logs-sort",
     key: (logGroup: LogGroup) => logGroup.logGroupName!,
-    sortUnvisited: (a, b) => a.logGroupName!.localeCompare(b.logGroupName!),
+    sortUnvisited: (a, b) => b.creationTime! - a.creationTime!,
   });
 
   return (
     <List
       isLoading={isLoading}
-      searchBarPlaceholder="Search log group by name prefix (>2 characters)"
+      searchBarPlaceholder="Search log groups by name"
       searchBarAccessory={<AWSProfileDropdown onProfileSelected={mutate} />}
       onSearchTextChange={setPrefixQuery}
       isShowingDetail={!isLoading && !error && (logGroups || []).length > 0 && isDetailsEnabled}
@@ -41,7 +41,15 @@ export default function CloudWatch() {
         />
       )}
       {!error && logGroups?.length === 0 && (
-        <List.EmptyView title="No queues found!" icon={{ source: Icon.Warning, tintColor: Color.Orange }} />
+        <List.EmptyView
+          title="No log groups found!"
+          icon={{ source: Icon.Warning, tintColor: Color.Orange }}
+          actions={
+            <ActionPanel>
+              <Action title="Invalidate Cache" icon={Icon.Trash} onAction={() => mutate()} />
+            </ActionPanel>
+          }
+        />
       )}
       {sortedLogGroups.map((logGroup) => (
         <List.Item
@@ -115,6 +123,11 @@ export default function CloudWatch() {
                   title="Reset Ranking"
                   icon={Icon.ArrowCounterClockwise}
                   onAction={() => resetRanking(logGroup)}
+                />
+                <Action
+                  title="Invalidate Cache"
+                  icon={Icon.Trash}
+                  onAction={() => mutate()}
                 />
               </ActionPanel.Section>
             </ActionPanel>
