@@ -44,9 +44,9 @@ function S3Bucket({ bucket }: { bucket: Bucket }) {
       title={bucket.Name!}
       actions={
         <ActionPanel>
-          <Action.Push target={<S3BucketObjects bucket={bucket} />} title="List Objects" icon={Icon.Document} />
-          <Action.Push target={<S3BucketPolicy bucket={bucket} />} title="Show Bucket Policy" icon={Icon.Key} />{" "}
           <AwsAction.Console url={resourceToConsoleLink(bucket.Name, "AWS::S3::Bucket")} />
+          <Action.Push target={<S3BucketObjects bucket={bucket} />} title="List Objects" icon={Icon.Document} />
+          <Action.Push target={<S3BucketPolicy bucket={bucket} />} title="Show Bucket Policy" icon={Icon.Key} />
           <Action.CopyToClipboard title="Copy Name" content={bucket.Name || ""} />
           <Action.CopyToClipboard title="Copy ARN" content={"arn:aws:s3:::" + bucket.Name || ""} />
         </ActionPanel>
