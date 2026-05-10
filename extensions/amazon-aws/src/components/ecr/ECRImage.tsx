@@ -19,7 +19,7 @@ function ECRImage({ repository }: { repository: Repository }) {
       {images ? (
         images.map((image) => (
           <List.Item
-            key={image.imageDigest}
+            key={`${image.imageDigest}-${image.imageTag}`}
             title={image.imageTag || ""}
             icon={isLoading ? Icon.CircleProgress : "aws-icons/ecr.png"}
             detail={
@@ -28,7 +28,7 @@ function ECRImage({ repository }: { repository: Repository }) {
                   <List.Item.Detail.Metadata>
                     <List.Item.Detail.Metadata.Label key={"Tag"} title={"Tag"} text={`Digest`} />
                     <List.Item.Detail.Metadata.Label
-                      key={image.imageDigest}
+                      key={`${image.imageDigest}-${image.imageTag}`}
                       title={image.imageTag || ""}
                       text={image.imageDigest || ""}
                     />

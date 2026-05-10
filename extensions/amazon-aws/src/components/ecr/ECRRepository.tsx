@@ -25,7 +25,7 @@ function ECRRepository({ repository }: { repository: Repository }) {
               <List.Item.Detail.Metadata.Label key={"Tag"} title={"Tag"} text={`Digest`} />
               {images?.map((i) => (
                 <List.Item.Detail.Metadata.Label
-                  key={i.imageDigest}
+                  key={`${i.imageDigest}-${i.imageTag}`}
                   title={i.imageTag || ""}
                   text={i.imageDigest || ""}
                 />

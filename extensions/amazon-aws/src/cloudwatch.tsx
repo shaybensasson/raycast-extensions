@@ -108,6 +108,18 @@ export default function CloudWatch() {
                 url={resourceToConsoleLink(logGroup.logGroupName, "AWS::Logs::LogGroup")}
                 onAction={() => visit(logGroup)}
               />
+              <Action.OpenInBrowser
+                title="Start Tailing"
+                icon={Icon.Terminal}
+                url={(() => {
+                  const region = process.env.AWS_REGION;
+                  const arn = logGroup.logGroupArn!.replace(/:[\*]+$/, "");
+                  const encodedArn = arn.replace(/:/g, "*3a").replace(/\//g, "*2f");
+                  return `https://${region}.console.aws.amazon.com/cloudwatch/home?region=${region}#logsV2:live-tail$3FlogGroupArns$3D~(~'${encodedArn})`;
+                })()}
+                shortcut={{ modifiers: ["cmd"], key: "t" }}
+                onOpen={() => visit(logGroup)}
+              />
               <ActionPanel.Section title={"Logs Actions"}>
                 <Action.CopyToClipboard
                   title="Copy Log Group Name"

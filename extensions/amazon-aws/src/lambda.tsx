@@ -1,4 +1,4 @@
-import { FunctionConfiguration, LambdaClient, ListFunctionsCommand } from "@aws-sdk/client-lambda";
+import { FunctionConfiguration, GetFunctionCommand, LambdaClient, ListFunctionsCommand } from "@aws-sdk/client-lambda";
 import { Action, ActionPanel, Icon, List } from "@raycast/api";
 import { useCachedPromise } from "@raycast/utils";
 import AWSProfileDropdown from "./components/searchbar/aws-profile-dropdown";
@@ -26,6 +26,25 @@ export default function Lambda() {
 }
 
 function LambdaFunction({ func }: { func: FunctionConfiguration }) {
+  const isImage = func.PackageType === "Image";
+  const { data: imageUri } = useCachedPromise(
+    async (name: string) => {
+      try {
+        const { Code } = await new LambdaClient({}).send(new GetFunctionCommand({ FunctionName: name }));
+        const uri = Code?.ResolvedImageUri ?? Code?.ImageUri ?? "";
+        const path = uri.split("/").slice(1).join("/").split(":")[0].split("@")[0];
+        return path.split("/").pop() ?? path;
+      } catch (err) {
+        console.error(`[lambda] GetFunction failed for ${name}:`, err);
+        return null;
+      }
+    },
+    [func.FunctionName ?? ""],
+    { execute: isImage && !!func.FunctionName },
+  );
+
+  const runtimeLabel = isImage ? (imageUri ?? "Image") : func.Runtime ?? "";
+
   return (
     <List.Item
       key={func.FunctionArn}
@@ -58,7 +77,7 @@ function LambdaFunction({ func }: { func: FunctionConfiguration }) {
           </ActionPanel.Section>
         </ActionPanel>
       }
-      accessories={[{ text: func.Runtime || "" }, { icon: getRuntimeIcon(func.Runtime) }]}
+      accessories={[{ text: runtimeLabel }, { icon: getRuntimeIcon(func.Runtime) }]}
     />
   );
 }
@@ -76,12 +95,12 @@ async function fetchFunctions(
     return fetchFunctions(NextMarker, combinedFunctions);
   }
 
-  return combinedFunctions;
+  return combinedFunctions.sort((a, b) => (b.LastModified ?? "").localeCompare(a.LastModified ?? ""));
 }
 
 const getRuntimeIcon = (runtime: FunctionConfiguration["Runtime"]) => {
   if (!runtime) {
-    return Icon.QuestionMark;
+    return "lambda-runtime-icons/docker.png";
   }
 
   if (runtime.includes("node")) {

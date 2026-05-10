@@ -33,12 +33,13 @@ function ECSCluster({ cluster }: { cluster: Cluster }) {
       }
       actions={
         <ActionPanel>
+          <AwsAction.Console url={getClusterUrl(cluster)} />
           <Action.Push
             title={"View Services"}
             icon={Icon.Eye}
             target={<ECSClusterServices clusterArn={cluster.clusterArn || ""} />}
+            shortcut={{ modifiers: ["cmd"], key: "return" }}
           />
-          <AwsAction.Console url={getClusterUrl(cluster)} />
           <ActionPanel.Section title="Copy">
             <AwsAction.ExportResponse response={cluster} />
             <Action.CopyToClipboard
