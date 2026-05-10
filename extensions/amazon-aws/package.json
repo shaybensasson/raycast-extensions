@@ -119,6 +119,12 @@
       "mode": "view"
     },
     {
+      "name": "cloudwatch-alarms",
+      "title": "CloudWatch Alarms",
+      "description": "Browse and open CloudWatch alarms",
+      "mode": "view"
+    },
+    {
       "name": "ssm",
       "title": "SSM Parameters",
       "description": "Find, view and copy a parameter value",
@@ -332,6 +338,7 @@
     "@aws-sdk/client-apigatewayv2": "^3.864.0",
     "@aws-sdk/client-appsync": "^3.859.0",
     "@aws-sdk/client-cloudformation": "^3.864.0",
+    "@aws-sdk/client-cloudwatch": "^3.864.0",
     "@aws-sdk/client-cloudwatch-logs": "^3.864.0",
     "@aws-sdk/client-codeartifact": "^3.864.0",
     "@aws-sdk/client-codepipeline": "^3.864.0",

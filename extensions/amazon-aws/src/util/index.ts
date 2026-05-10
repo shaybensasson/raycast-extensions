@@ -33,6 +33,8 @@ export function resourceToConsoleLink(
       return `${AWS_URL_BASE}/cloudwatch/home?region=${AWS_REGION}#logsV2:log-groups/log-group/${encodeURIComponent(
         resourceId,
       )}`;
+    case "AWS::CloudWatch::Alarm":
+      return `${AWS_URL_BASE}/cloudwatch/home?region=${AWS_REGION}#alarmsV2:alarm/${encodeURIComponent(resourceId)}`;
     case "AWS::CloudFormation::Stack":
       return `${AWS_URL_BASE}/cloudformation/home?region=${AWS_REGION}#/stacks/stackinfo?stackId=${resourceId}`;
     case "AWS::Lambda::Function":
