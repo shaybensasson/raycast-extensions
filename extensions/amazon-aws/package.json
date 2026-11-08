@@ -83,6 +83,22 @@
       "mode": "view"
     },
     {
+      "name": "cloudshell",
+      "title": "CloudShell",
+      "description": "Open AWS CloudShell in the configured region",
+      "mode": "no-view",
+      "preferences": [
+        {
+          "name": "region",
+          "type": "textfield",
+          "required": false,
+          "title": "Region",
+          "description": "AWS region to open CloudShell in",
+          "default": "eu-west-1"
+        }
+      ]
+    },
+    {
       "name": "cloudformation",
       "title": "CloudFormation",
       "description": "List and open stacks, resources and exports",
